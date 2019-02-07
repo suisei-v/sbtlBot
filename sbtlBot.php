@@ -6,15 +6,15 @@ require_once 'Subtitle.php';
 class SbtlBot extends TelegramBot
 {
     private $update;
-	private $user_message = array();
+    private $user_message = array();
     private $chat_id;
     private $last_message;
 
-	public function __construct($token, $proxy, $db)
-	{
-		parent::__construct($token, $proxy);
+    public function __construct($token, $proxy, $db)
+    {
+        parent::__construct($token, $proxy);
         $this->initdb($db);
-	}
+    }
 
     private function convertSubs($str)
     {
@@ -32,9 +32,9 @@ class SbtlBot extends TelegramBot
         }
         return $res;
     }
-	
-	public function newUpdate($update)
-	{
+    
+    public function newUpdate($update)
+    {
         $this->update = $update;
         $chat_id = $update['message']['chat']['id'];
         $this->chat_id = $chat_id;
@@ -54,7 +54,7 @@ class SbtlBot extends TelegramBot
             }
         }
         $this->dbUpdateChat($chat_array);
-	}
+    }
 
     private function dbGetChat($chat_id)
     {
@@ -116,10 +116,10 @@ class SbtlBot extends TelegramBot
         return $res;
     }
 
-	private function processCommand()
-	{
+    private function processCommand()
+    {
         $command = $this->user_message['command'];
-		switch ($command) {
+        switch ($command) {
         case ('/start'):
             $text = "Отправь мне строки с 'Dialogue' в начале, " .
                   "и я превращу их в читабельный вид.";
@@ -144,15 +144,15 @@ class SbtlBot extends TelegramBot
         default:
             $this->sendMessage("Неизвестная команда." . PHP_EOL .
                                "Справка: /help");
-		}
-	}
-	private function sendMessage($text, $options = array())
-	{
-		$query = array(
-			'chat_id' => $this->chat_id,
-			'text' => $text
-		);
+        }
+    }
+    private function sendMessage($text, $options = array())
+    {
+        $query = array(
+            'chat_id' => $this->chat_id,
+            'text' => $text
+        );
         $query += $options;
-		$this->request('sendMessage', $query);
-	}
+        $this->request('sendMessage', $query);
+    }
 }
