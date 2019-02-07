@@ -14,8 +14,9 @@ class Subtitle
 
     public function isValid()
     {
-        if (!(substr($this->sub, 0, 10) === "Dialogue: "))
-            return FALSE;   
+        if (!(substr($this->sub, 0, 10) === "Dialogue: ") &&
+            !(substr($this->sub, 0, 9) === "Comment: "))
+            return FALSE;
         if (strlen($this->sub) < 43)
             return FALSE;
         $i = 0;
@@ -29,19 +30,19 @@ class Subtitle
 
     public function getValues()
     {
-        $this->start_hour = substr($this->sub, 12, 1);
-        $this->start_min = substr($this->sub, 14, 2);
-        $this->start_sec = substr($this->sub, 17, 2);
-        
-        $this->end_hour = substr($this->sub, 23, 1);
-        $this->end_min = substr($this->sub, 25, 2);
-        $this->end_sec = substr($this->sub, 28, 2);
-
-        $i = strpos($this->sub, ',', 34);
+        $i = strpos($this->sub, ',');
         $i++;
-        $this->actor = substr($this->sub, $i,
-                              strpos($this->sub, ',', $i) - $i);
-        for ($j = 0; $j < 5; $j++, $i++) {
+        $this->start_hour = substr($this->sub, $i, 1);
+        $this->start_min = substr($this->sub, $i += 2, 2);
+        $this->start_sec = substr($this->sub, $i += 3, 2);
+        
+        $this->end_hour = substr($this->sub, $i += 6, 1);
+        $this->end_min = substr($this->sub, $i += 2, 2);
+        $this->end_sec = substr($this->sub, $i += 3, 2);
+
+        $i = strpos($this->sub, ',', $i);
+        $i++;
+        for ($j = 0; $j < 6; $j++, $i++) {
             $i = strpos($this->sub, ',', $i);
         }
         $this->text = substr($this->sub, $i);
