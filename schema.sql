@@ -1,0 +1,9 @@
+CREATE TABLE `chats` (
+  `chat_id` int(20) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `username` varchar(200) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `message_count` int(11) NOT NULL,
+  `last_message` text NOT NULL,
+  `last_message_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
