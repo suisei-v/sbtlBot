@@ -2,33 +2,51 @@
 
 class Subtitle
 {
+    private $raw;
     private $sub;
     private $start_hour, $start_min, $start_sec;
     private $end_hour, $end_min, $end_sec;
     private $actor, $text;
+    private $valid = false;
 
     public function __construct($str)
     {
         $this->sub = $str;
+        if ($this->checkValid()) {
+            $this->valid = true;
+            $this->setValues();
+        }
     }
 
-    public function isValid()
+    public function isValid() {
+        return $this->valid;
+    }
+
+    public function getRaw() {
+        return $this->sub;
+    }
+
+    public function getText() {
+        return $this->text;
+    }
+
+    private function checkValid()
     {
         if (!(substr($this->sub, 0, 10) === "Dialogue: ") &&
             !(substr($this->sub, 0, 9) === "Comment: "))
-            return FALSE;
+            return false;
         if (strlen($this->sub) < 43)
-            return FALSE;
+            return false;
         $i = 0;
         for ($j = 0; $j < 9; $j++, $i++) {
             $i = strpos($this->sub, ',', $i);
-            if ($i === FALSE)
-                return FALSE;
+            if ($i === false)
+                return false;
         }
-        return TRUE;
+        return true;
     }
 
-    public function getValues()
+    private function setValues()
     {
         $i = strpos($this->sub, ',');
         $i++;
@@ -48,15 +66,6 @@ class Subtitle
         $this->text = substr($this->sub, $i);
     }
 
-    public function convertToString()
-    {
-        $res = ($this->start_hour == '0' ? '' : $this->start_hour . ':') .
-             $this->start_min . ':' . $this->start_sec . ' - ' .
-             ($this->end_hour == '0' ? '' : $this->end_hour . ':') .
-             $this->end_min . ':' . $this->end_sec . '  ' . $this->clearText();
-        return $res;
-    }
-
     private function clearText()
     {
         $ret = str_replace('\\N', ' ', $this->text);
@@ -64,5 +73,14 @@ class Subtitle
         $ret = preg_replace('!\s+!', ' ', $ret);
         $ret = trim($ret);
         return $ret;
-    }  
+    }
+
+    public function __toString()
+    {
+        $res = ($this->start_hour == '0' ? '' : $this->start_hour . ':') .
+             $this->start_min . ':' . $this->start_sec . ' - ' .
+             ($this->end_hour == '0' ? '' : $this->end_hour . ':') .
+             $this->end_min . ':' . $this->end_sec . '  ' . $this->clearText();
+        return $res;
+    }
 }
