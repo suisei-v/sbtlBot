@@ -27,7 +27,5 @@ $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD,
                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
 
-//error_log(var_export($update, true));
-
 $router = new Router($ms, $pdo, $admin_list);
 $reply = $router->route($update);
