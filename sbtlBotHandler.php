@@ -25,7 +25,7 @@ $update = json_decode($response, true);
 $ms = new MessageSender($token, $proxy);
 $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD,
                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-               PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
+               PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4']);
 
 $router = new Router($ms, $pdo, $admin_list);
 $reply = $router->route($update);
