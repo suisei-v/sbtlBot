@@ -24,5 +24,5 @@ python3 with 'pysubs2' and 'requests' modules.
 
 `cp config.sample.php config.php`
 
-Files functionality is not finished. It can just save text file you're sending him. To prevent errors create folder 'files' in root with 'w' permission for www-data:www-data (or just chmod 777).
+Create folder 'files' in root with 'w' permission for www-data:www-data (or just chmod 777).
 
