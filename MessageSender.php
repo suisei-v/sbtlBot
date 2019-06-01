@@ -50,6 +50,8 @@ class MessageSender {
     }
 
     public function sendMessage($chat_id, $text, $optional = []) {
+        if (mb_strlen($text) > 4096)
+            $text = "Слишком длинное сообщение."; //todo: split into 2,3... messages
         $query = array(
             'chat_id' => $chat_id,
             'text' => $text
@@ -73,6 +75,32 @@ class MessageSender {
         $error = curl_error($this->ch);
         if ($error) {
             error_log("curl file-dl error:  " . $error);
+            return false;
+        }
+        return $res;
+    }
+
+    public function sendDocument($chat_id, $docpath, $caption = "") {
+        $url = $this->urlbase . "/sendDocument";
+        $cfile = new CURLFile($docpath);
+        
+        curl_setopt($this->ch, CURLOPT_URL, $url);
+        curl_setopt($this->ch, CURLOPT_POST, 1);
+        curl_setopt($this->ch, CURLOPT_POSTFIELDS,
+                    ["chat_id" => $chat_id,
+                     "document" => $cfile,
+                     "caption" => $caption]);
+        
+        $res = curl_exec($this->ch);
+        $error = curl_error($this->ch);
+        if ($error) {
+            error_log("curl error:  " . $error);
+            return false;
+        }
+        
+        $decoded = json_decode($res, true);
+        if (!$decoded['ok']) {
+            error_log("sendDocument error:  " . $decoded['description']);
             return false;
         }
         return $res;

@@ -33,7 +33,7 @@ class Database {
                   $data["message"]["chat"]["last_name"];
         else
             $name = $data["message"]["chat"]["title"];
-        $last_message = $data["message"]["text"];
+        $last_message = $data["message"]["text"] ?? "";
         $last_message_date = $data["message"]["date"];
         $last_message_date = date("Y-m-d H:i:s", $last_message_date);
         
@@ -66,29 +66,35 @@ class Database {
         $stmt->execute();
     }
 
-    public function getStat() {
+    public function getStat($count = 5) {
+        if ($count <= 0)
+            $count = 5;
         $str = "";
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM chats");
         $stmt->execute();
-        $count = $stmt->fetch();
-        $count = $count[0];
-        $str .= "Всего записей: $count" . PHP_EOL;
+        $data = $stmt->fetch();
+        $data = $data[0];
+        $str .= "Всего записей: $data" . PHP_EOL;
 
         $stmt = $this->pdo->prepare(
-            "SELECT * FROM chats " .
-            "ORDER BY last_message_date DESC LIMIT 1");
+            "SELECT username, name, last_message_date AS date FROM chats " .
+            "ORDER BY last_message_date DESC LIMIT :count");
+        $stmt->bindValue(':count', (int)$count, PDO::PARAM_INT);
         $stmt->execute();
-        $res = $stmt->fetch();
-        $str .= "Последняя от @" . $res["username"] .
-             " (" . $res["name"] . ")  в " .
-             $res["last_message_date"] . " c текстом:" . PHP_EOL .
-             $res["last_message"];
+        $res = $stmt->fetchAll();
+        
+        $str .= "Последние $count сообщений:" . PHP_EOL;
+        foreach ($res as $i) {
+            $str .= "В ".$i["date"]." от @" . $i["username"] .
+                 " (" . $i["name"] . ")" . PHP_EOL;
+        }
+        // error_log(var_export($str, true));
         return $str;
     }
 
-    public function getTop($count = 10) {
+    public function getTop($count = 5) {
         if ($count <= 0)
-            $count = 10;
+            $count = 5;
         $stmt = $this->pdo->prepare(
             "SELECT username, name, message_count FROM chats " .
             "ORDER BY message_count DESC LIMIT :count");

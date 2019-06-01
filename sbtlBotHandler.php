@@ -12,13 +12,6 @@ error_reporting(E_ALL);
 
 date_default_timezone_set('Europe/Moscow');
 
-// $response = file_get_contents('php://input');
-// $update = json_decode($response, true);
-// $bot = new SbtlBot($token, $proxy, $db);
-// $res = $bot->newUpdate($update);
-
-
-
 $response = file_get_contents('php://input');
 $update = json_decode($response, true);
 

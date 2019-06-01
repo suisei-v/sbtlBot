@@ -20,17 +20,28 @@ class CommandHandler {
             return $this->getHelpMessage();
         case "/length":
             return $this->getLengthMessage();
+        case "/translate":
+            return "Отправьте мне *.ass файл";
         case "/stat":
             if ($this->is_admin) {
-                return $this->db->getStat();
+                $count = isset($splitted[1]) ? $splitted[1] : 5;
+                return $this->db->getStat($count);
             }
+            break;
         case "/top":
             if ($this->is_admin) {
                 $count = isset($splitted[1]) ? $splitted[1] : 5;
                 return $this->db->getTop($count);
             }
+            break;
+        case "/tail":
+            if ($this->is_admin) {
+                $count = isset($splitted[1]) ? $splitted[1] : 5;
+                exec("tail -n $count /var/log/php_errors", $out);
+                return implode(PHP_EOL, $out);
+            }
+            break;
         }
-        
         return "Неизвестная команда.";
     }
     
@@ -44,14 +55,16 @@ class CommandHandler {
         $text =
               "Бот предназначен для конвертации текста из " .
               "ass формата в удобный для чтения вид." . PHP_EOL .
-              "Кроме этого, бот умеет считать длину строки с " .
-              "помощью команды /length." . PHP_EOL . PHP_EOL .
-              "by @suisei_v";
+			  "Команды: " . PHP_EOL . 
+              "/length - посчитать длину строки" . PHP_EOL .
+              "/translate - перевести *.ass файл (яндекс переводчик)" . PHP_EOL . PHP_EOL .
+              "По всем вопросам - @suisei_v";
         if ($this->is_admin) {
             $text .= PHP_EOL . PHP_EOL . "Admin panel:" . PHP_EOL;
             $text .=
                   "/stat" . PHP_EOL .
-                  "/top" . PHP_EOL;
+                  "/top" . PHP_EOL .
+                  "/tail";
         }
         return $text;
     }

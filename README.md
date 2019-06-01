@@ -6,7 +6,7 @@ Bot available here [@sbtlBot](https://t.me/sbtlBot)
 ### Usage:
 
 Just send him lines of ssa text (usually starting with 'Dialogue').
-It can also return length of string it's got.
+Additionally, it can /length input string and /translate input *.ass file to Russian.
 
 ### Dependencies:
 
@@ -15,6 +15,8 @@ It can also return length of string it's got.
 `apt install php7.0-curl`
 
 `apt install php7.0-mbstring`
+
+python3 with 'pysubs2' and 'requests' modules.
 
 ### Setup:
 

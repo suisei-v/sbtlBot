@@ -6,4 +6,4 @@ CREATE TABLE `chats` (
   `message_count` int(11) NOT NULL,
   `last_message` text NOT NULL,
   `last_message_date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
