@@ -13,8 +13,6 @@ class Translator {
         $path = realpath($this->dc->getPath());
         $command = "python3 translate.py \"$path\" $yatoken";
         exec($command, $output, $retcode);
-        if ($res != 0)
-            return false;
         $res["retcode"] = $retcode;
         $res["output"] = $output;
         $res["lines"] = $output[0];
