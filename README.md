@@ -1,7 +1,6 @@
 ## SubtitleBot
 
 Telegram bot for converting strings from SubStationAlpha (*.ssa/*.ass) to human-friendly format.
-Bot available here [@sbtlBot](https://t.me/sbtlBot)
 
 ### Usage:
 
